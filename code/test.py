@@ -31,18 +31,6 @@ def pca_analysis_results(image_file, data_file, true_labels_file, show_ari_plot=
     f = []
     n = []
 
-    if show_component_hist:
-        plt.rcParams.update({'font.size': 12})
-        # Plot PCA Distribution
-        sns.distplot(pca, hist=True, kde=False,
-                     bins=int(180 / 5), color='blue',
-                     hist_kws={'edgecolor': 'black'})
-        # Add labels
-        plt.title('Histogram of Princpal Components')
-        plt.xlabel('Principal Components')
-        plt.ylabel('Frequency')
-        plt.show()
-
     max_rand_score = -1
     true_max = []
     pred_max = []
@@ -70,6 +58,32 @@ def pca_analysis_results(image_file, data_file, true_labels_file, show_ari_plot=
         recall.append(recall_score(true, pred, zero_division=1))
 
     print('Threshold Value:' + str(bound_max))
+
+    # seaborn histogram
+    plt.rcParams.update({'font.size': 12})
+    cancer = []
+    noncancer = []
+    for i in range(len(true_labels)):
+        if true_labels[i] == 1:
+            cancer.append(pca[0][i])
+        else:
+            noncancer.append(pca[0][i])
+
+    if show_component_hist:
+        sns.distplot(cancer, hist=False, kde=True,
+                     bins=int(20), color='#90ee90',
+                     hist_kws={'edgecolor': 'black'}, label="Cancerous")
+        sns.distplot(noncancer, hist=False, kde=True,
+                     bins=int(20), color='black',
+                     hist_kws={'edgecolor': 'black'}, label="Non-cancerous")
+        plt.axvline(bound_max, linestyle="--")
+        plt.legend()
+
+        # Add labels
+        # plt.title('Density Plot of Princpal Components')
+        plt.xlabel('PCA Components')
+        plt.ylabel('Density')
+        plt.show()
 
     if show_accuracy_plot:
         plt.scatter(bounds, f)
@@ -142,23 +156,12 @@ def percent_dropout_analysis_results(image_file, data_file, true_labels_file, sh
     f = []
     n = []
 
-    # Plot Percent dropout Distribution
-    # seaborn histogram
-    if show_component_hist:
-        sns.distplot(percent, hist=True, kde=False,
-                     bins=int(30), color='blue',
-                     hist_kws={'edgecolor': 'black'})
-        # Add labels
-        plt.title('Histogram of Percent Dropout Components')
-        plt.xlabel('Percent Dropout Components')
-        plt.ylabel('Frequency')
-        plt.show()
-
     max_rand_score = -1
     true_max = []
     pred_max = []
     precision = []
     recall = []
+    bound_max = -1
     for i in range(len(bounds)):
         pred_labels = label_components(percent[0], bounds[i])
         true = np.transpose(true_labels.to_numpy()).flatten()
@@ -170,6 +173,7 @@ def percent_dropout_analysis_results(image_file, data_file, true_labels_file, sh
             max_rand_score = rand
             true_max = true
             pred_max = pred
+            bound_max = bounds[i]
         a.append(accuracy_score(true, pred))
         r.append(rand)
         f.append(f1_score(true, pred))
@@ -177,7 +181,34 @@ def percent_dropout_analysis_results(image_file, data_file, true_labels_file, sh
         precision.append(precision_score(true, pred, zero_division=1))
         recall.append(recall_score(true, pred, zero_division=1))
 
+    # Plot Percent dropout Distribution
     plt.rcParams.update({'font.size': 12})
+    # seaborn histogram
+    cancer = []
+    noncancer = []
+    for i in range(len(true_labels)):
+        if true_labels[i] == 1:
+            cancer.append(percent[0][i])
+        else:
+            noncancer.append(percent[0][i])
+
+    if show_component_hist:
+        sns.distplot(cancer, hist=False, kde=True,
+                     bins=int(20), color='#90ee90',
+                     hist_kws={'edgecolor': 'black'}, label="Cancerous")
+        sns.distplot(noncancer, hist=False, kde=True,
+                     bins=int(20), color='black',
+                     hist_kws={'edgecolor': 'black'}, label="Non-cancerous")
+        plt.axvline(bound_max, linestyle="--")
+        print(bound_max)
+        plt.legend()
+
+
+        # Add labels
+        # plt.title('Density Plot of Percent Dropout Components')
+        plt.xlabel('Percent Dropout Components')
+        plt.ylabel('Density')
+        plt.show()
 
     if show_accuracy_plot:
         plt.scatter(bounds, f)

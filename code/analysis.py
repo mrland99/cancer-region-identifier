@@ -117,6 +117,7 @@ def principal_PCA(filename: str):
     # Run PCA
     pca = PCA(n_components=1, svd_solver='full')
     pca_components = pca.fit_transform(df)
+    print("PCA Explained Variance: %s" % pca.explained_variance_ratio_)
 
     # Save components to a DataFrame
     pca_components = pd.DataFrame(pca_components)
