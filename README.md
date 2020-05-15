@@ -1,7 +1,8 @@
 # spatial-research
 Repository to store the code for my research conducted as part of the Raphael Lab at Princeton University.
 
-Abstract:
+## Abstract:
+
 Previous methods of determining normal cells vs cancer cells based on gene
 expression data have relied on analyzing a subset of tissue specific genes (i.e.
 BRCA2 mutation in breast tissue). However, the diversity of gene expression in
