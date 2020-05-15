@@ -41,7 +41,6 @@ def pca_analysis_results(image_file, data_file, true_labels_file, show_ari_plot=
         pred_labels = label_components(pca[0], bounds[i])
         true = np.transpose(true_labels.to_numpy()).flatten()
         pred = np.transpose(pred_labels.to_numpy()).flatten()
-        # pred, true = match_labels(pred_labels, true_labels)
         rand = adjusted_rand_score(true, pred)
         if rand > max_rand_score:
             spatial_xy_max = spatial_xy.copy()
@@ -53,7 +52,6 @@ def pca_analysis_results(image_file, data_file, true_labels_file, show_ari_plot=
         r.append(rand)
         f.append(f1_score(true, pred))
         n.append(normalized_mutual_info_score(true, pred))
-        # precision_val, recall_val = get_precision_recall(true, pred)
         precision.append(precision_score(true, pred, zero_division=1))
         recall.append(recall_score(true, pred, zero_division=1))
 
@@ -80,7 +78,7 @@ def pca_analysis_results(image_file, data_file, true_labels_file, show_ari_plot=
         plt.legend()
 
         # Add labels
-        # plt.title('Density Plot of Princpal Components')
+        plt.title('Density Plot of Princpal Components')
         plt.xlabel('PCA Components')
         plt.ylabel('Density')
         plt.show()
@@ -105,7 +103,7 @@ def pca_analysis_results(image_file, data_file, true_labels_file, show_ari_plot=
         plt.scatter(bounds, r)
         plt.xlabel('Threshold')
         plt.ylabel('ARI score')
-        # plt.title('ARI Score vs PCA Threshold')
+        plt.title('ARI Score vs PCA Threshold')
         plt.show()
         print('Max ARI: Score ' + str(max(r)))
 
@@ -122,10 +120,10 @@ def pca_analysis_results(image_file, data_file, true_labels_file, show_ari_plot=
 
         plt.figure(figsize=(27, 27))
         colors = ['black', "#90ee90"]
-        plt.scatter(spatial_xy['x'], spatial_xy['y'], c=pred_max, cmap=matplotlib.colors.ListedColormap(colors), s=250)
+        plt.scatter(spatial_xy_max['x'], spatial_xy_max['y'], c=pred_max, cmap=matplotlib.colors.ListedColormap(colors), s=250)
         plt.imshow(image)
         plt.grid(b=True)
-        # plt.title('Best Cluster According to PCA Threshold')
+        plt.title('Best Cluster According to PCA Threshold')
         plt.show()
 
         # revert parameters back to normal
@@ -166,7 +164,6 @@ def percent_dropout_analysis_results(image_file, data_file, true_labels_file, sh
         pred_labels = label_components(percent[0], bounds[i])
         true = np.transpose(true_labels.to_numpy()).flatten()
         pred = np.transpose(pred_labels.to_numpy()).flatten()
-        # pred, true = match_labels(pred_labels, true_labels)
         rand = adjusted_rand_score(true, pred)
         if rand > max_rand_score:
             spatial_xy_max = spatial_xy.copy()
@@ -205,7 +202,7 @@ def percent_dropout_analysis_results(image_file, data_file, true_labels_file, sh
 
 
         # Add labels
-        # plt.title('Density Plot of Percent Dropout Components')
+        plt.title('Density Plot of Percent Dropout Components')
         plt.xlabel('Percent Dropout Components')
         plt.ylabel('Density')
         plt.show()
@@ -230,7 +227,7 @@ def percent_dropout_analysis_results(image_file, data_file, true_labels_file, sh
         plt.scatter(bounds, r)
         plt.xlabel('Threshold')
         plt.ylabel('ARI score')
-        # plt.title('ARI Score vs Percent Dropout Threshold')
+        plt.title('ARI Score vs Percent Dropout Threshold')
         plt.show()
         print('Max ARI: Score ' + str(max(r)))
 
@@ -247,10 +244,10 @@ def percent_dropout_analysis_results(image_file, data_file, true_labels_file, sh
 
         plt.figure(figsize=(27, 27))
         colors = ['black', "#90ee90"]
-        plt.scatter(spatial_xy['x'], spatial_xy['y'], c=pred_max, cmap=matplotlib.colors.ListedColormap(colors), s=200)
+        plt.scatter(spatial_xy_max['x'], spatial_xy_max['y'], c=pred_max, cmap=matplotlib.colors.ListedColormap(colors), s=200)
         plt.imshow(image)
         plt.grid(b=True)
-        # plt.title('Best Cluster According to Percent Dropout Threshold')
+        plt.title('Best Cluster According to Percent Dropout Threshold')
         plt.show()
 
     return precision, recall
