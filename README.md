@@ -1,6 +1,12 @@
 # spatial-research
 Repository to store the code for my research conducted as part of the Raphael Lab at Princeton University.
 
+Data needed to run code can be found at: https://www.spatialresearch.org/resources-published-datasets/doi-10-1126science-aaf2403/.
+
+You will need:
+* Count matrices of the four layers
+* Images of the four layers
+
 ## Abstract:
 
 Previous methods of determining normal cells vs cancer cells based on gene
